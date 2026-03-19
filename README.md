@@ -37,7 +37,3 @@ mvn verify -pl prices-test-blackbox
 ```
 Los resultados se encontraran en `prices-test-blackbox/target/jmeter/results`.
 
-## Notas de Implementacion
-- Se ha corregido el escaneo de entidades mediante `@EntityScan`.
-- Se ha configurado `spring.jpa.defer-datasource-initialization: true` para asegurar la carga de `data.sql` despues de la creacion de tablas.
-- Se ha optimizado la compatibilidad con versiones recientes de Java mediante la configuracion del compilador en el POM raiz (forking a Java 21).
