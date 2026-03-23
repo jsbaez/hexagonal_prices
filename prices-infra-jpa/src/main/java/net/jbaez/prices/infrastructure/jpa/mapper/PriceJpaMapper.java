@@ -17,7 +17,6 @@ public interface PriceJpaMapper {
      * @param entity Entidad de base de datos.
      * @return Objeto de dominio.
      */
-    @Mapping(target = "amount", source = "price")
     Price toDomain(PriceEntity entity);
 
     /**
@@ -26,7 +25,6 @@ public interface PriceJpaMapper {
      * @param domain Objeto de dominio.
      * @return Entidad JPA.
      */
-    @Mapping(target = "price", source = "amount")
     @Mapping(target = "id", ignore = true)
     PriceEntity toEntity(Price domain);
 }

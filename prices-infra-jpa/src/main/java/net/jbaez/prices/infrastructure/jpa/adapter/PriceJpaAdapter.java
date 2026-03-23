@@ -8,22 +8,26 @@ import net.jbaez.prices.infrastructure.jpa.repository.PriceJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Adaptador de salida para la persistencia de precios usando JPA.
+ * Adaptador de persistencia que implementa el puerto de salida para JPA.
  */
 @Component
 @RequiredArgsConstructor
 public class PriceJpaAdapter implements PriceRepositoryPort {
 
     private final PriceJpaRepository priceJpaRepository;
+
     private final PriceJpaMapper priceJpaMapper;
 
     @Override
-    public Optional<Price> findApplicablePrice(LocalDateTime applicationDate, Long productId, Long brandId) {
-        return priceJpaRepository.findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+    public List<Price> findApplicablePrices(LocalDateTime applicationDate, Long productId, Long brandId) {
+        return priceJpaRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                 brandId, productId, applicationDate, applicationDate)
-                .map(priceJpaMapper::toDomain);
+                .stream()
+                .map(priceJpaMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

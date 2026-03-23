@@ -6,11 +6,12 @@ import net.jbaez.prices.domain.ports.in.GetPriceUseCase;
 import net.jbaez.prices.domain.ports.out.PriceRepositoryPort;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Optional;
 
 /**
  * Servicio de aplicacion para la gestion de precios.
- * Implementa el puerto de entrada para consultar precios.
+ * Implementa el puerto de entrada para consultar precios aplicando la logica de prioridad.
  */
 @RequiredArgsConstructor
 public class PriceService implements GetPriceUseCase {
@@ -19,6 +20,8 @@ public class PriceService implements GetPriceUseCase {
 
     @Override
     public Optional<Price> getPrice(LocalDateTime applicationDate, Long productId, Long brandId) {
-        return priceRepositoryPort.findApplicablePrice(applicationDate, productId, brandId);
+        return priceRepositoryPort.findApplicablePrices(applicationDate, productId, brandId)
+                .stream()
+                .max(Comparator.comparing(Price::getPriority));
     }
 }

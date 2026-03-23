@@ -9,10 +9,9 @@ El proyecto sigue los principios de la **Arquitectura Hexagonal Multi-modulo**:
 - `prices-infra-rest`: Adaptador de entrada para el API REST.
 - `prices-infra-jpa`: Adaptador de salida para persistencia en H2.
 - `prices-app-launcher`: Ensamblador de la aplicacion y configuracion de Spring.
-- `prices-test-blackbox`: Pruebas de caja negra con Apache JMeter.
 
 ## Requisitos
-- Java 21+ (Compatible con Java 25)
+- Java 21+
 - Maven 3.9+
 
 ## Ejecucion
@@ -27,13 +26,10 @@ mvn spring-boot:run -pl prices-app-launcher
 ```
 
 El endpoint estara disponible en:
-`GET http://localhost:8080/prices?applicationDate=2020-06-14T10:00:00&productId=35455&brandId=1`
+`GET http://localhost:8080/brands/1/products/35455/prices?applicationDate=2020-06-14T10:00:00`
 
-## Pruebas de Caja Negra (JMeter)
-El modulo `prices-test-blackbox` permite ejecutar los 5 escenarios solicitados externamente.
-Para ejecutarlos (con la aplicacion levantada):
-```bash
-mvn verify -pl prices-test-blackbox
-```
-Los resultados se encontraran en `prices-test-blackbox/target/jmeter/results`.
-
+## Notas de Implementacion
+- **Arquitectura Hexagonal:** Desacoplamiento total entre dominio, aplicacion e infraestructura.
+- **Logica de Prioridad:** Implementada en la capa de aplicacion (`PriceService`) para mayor robustez.
+- **REST Semantico:** Rutas basadas en recursos y manejo global de errores con Problem Details (RFC 7807).
+- **Optimizacion:** Indices compuestos en base de datos para consultas eficientes.

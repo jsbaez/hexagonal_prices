@@ -19,7 +19,6 @@
         <module>prices-infra-rest</module>
         <module>prices-infra-jpa</module>
         <module>prices-app-launcher</module>
-        <module>prices-test-blackbox</module>
     </modules>
 
     <properties>

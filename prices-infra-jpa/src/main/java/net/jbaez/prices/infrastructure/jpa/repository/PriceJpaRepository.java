@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Repositorio de Spring Data JPA para la entidad PriceEntity.
@@ -14,15 +14,14 @@ import java.util.Optional;
 public interface PriceJpaRepository extends JpaRepository<PriceEntity, Long> {
 
     /**
-     * Busca el primer registro que coincida con la marca, producto y rango de fechas,
-     * ordenado por prioridad descendente para obtener el mas relevante.
+     * Busca los registros que coincidan con la marca, producto y rango de fechas.
      *
      * @param brandId Identificador de la cadena.
      * @param productId Identificador del producto.
      * @param date1 Fecha de aplicacion (para START_DATE).
      * @param date2 Fecha de aplicacion (para END_DATE).
-     * @return Un {@link Optional} con el primer resultado encontrado.
+     * @return Lista de entidades encontradas.
      */
-    Optional<PriceEntity> findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+    List<PriceEntity> findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
             Long brandId, Long productId, LocalDateTime date1, LocalDateTime date2);
 }

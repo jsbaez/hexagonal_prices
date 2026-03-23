@@ -29,7 +29,10 @@ public class Price {
 
     private Integer priority;
 
-    private BigDecimal amount;
+    /**
+     * Precio final a aplicar.
+     */
+    private BigDecimal price;
 
     private String currency;
 }

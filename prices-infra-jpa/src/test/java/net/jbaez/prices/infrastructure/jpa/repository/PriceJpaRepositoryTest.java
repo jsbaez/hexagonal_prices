@@ -8,10 +8,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Pruebas de integracion para el repositorio JPA.
+ * Verifica que la consulta devuelve todos los candidatos sin aplicar filtros de prioridad.
+ */
 @DataJpaTest
 class PriceJpaRepositoryTest {
 
@@ -19,8 +23,8 @@ class PriceJpaRepositoryTest {
     private PriceJpaRepository priceJpaRepository;
 
     @Test
-    @DisplayName("Debe devolver el precio con MAYOR prioridad cuando coinciden las fechas")
-    void findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc_Success() {
+    @DisplayName("Debe devolver TODOS los precios candidatos cuando coinciden las fechas")
+    void findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual_Success() {
         // Arrange
         Long brandId = 1L;
         Long productId = 35455L;
@@ -52,24 +56,22 @@ class PriceJpaRepositoryTest {
         priceJpaRepository.save(highPriority);
 
         // Act
-        Optional<PriceEntity> result = priceJpaRepository.findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+        List<PriceEntity> result = priceJpaRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                 brandId, productId, testDate, testDate);
 
         // Assert
-        assertThat(result).isPresent();
-        assertThat(result.get().getPriority()).isEqualTo(1);
-        assertThat(result.get().getPriceList()).isEqualTo(2);
-        assertThat(result.get().getPrice()).isEqualByComparingTo("25.45");
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(PriceEntity::getPriority).containsExactlyInAnyOrder(0, 1);
     }
 
     @Test
-    @DisplayName("Debe devolver vacio cuando no hay precios en el rango de fechas")
-    void findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc_NotFound() {
+    @DisplayName("Debe devolver lista vacia cuando no hay precios en el rango de fechas")
+    void findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual_NotFound() {
         // Arrange
         LocalDateTime testDate = LocalDateTime.of(2025, 1, 1, 0, 0);
 
         // Act
-        Optional<PriceEntity> result = priceJpaRepository.findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+        List<PriceEntity> result = priceJpaRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                 1L, 35455L, testDate, testDate);
 
         // Assert

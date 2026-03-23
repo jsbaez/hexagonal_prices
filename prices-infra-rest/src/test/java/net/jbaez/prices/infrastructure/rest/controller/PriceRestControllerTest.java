@@ -47,7 +47,7 @@ class PriceRestControllerTest {
                 .productId(productId)
                 .brandId(brandId)
                 .priceList(1)
-                .amount(new BigDecimal("35.50"))
+                .price(new BigDecimal("35.50"))
                 .currency("EUR")
                 .build();
 
@@ -57,14 +57,12 @@ class PriceRestControllerTest {
         when(priceRestMapper.toResponse(any())).thenReturn(response);
 
         // Act & Assert
-        mockMvc.perform(get("/prices")
+        mockMvc.perform(get("/brands/1/products/35455/prices")
                 .param("applicationDate", "2020-06-14T10:00:00")
-                .param("productId", productId.toString())
-                .param("brandId", brandId.toString())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.priceList").value(1))
-                .andExpect(jsonPath("$.amount").value(35.50));
+                .andExpect(jsonPath("$.price").value(35.50));
     }
 
     @Test
@@ -74,10 +72,8 @@ class PriceRestControllerTest {
         when(getPriceUseCase.getPrice(any(), any(), any())).thenReturn(Optional.empty());
 
         // Act & Assert
-        mockMvc.perform(get("/prices")
+        mockMvc.perform(get("/brands/1/products/999/prices")
                 .param("applicationDate", "2020-06-14T10:00:00")
-                .param("productId", "999")
-                .param("brandId", "1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

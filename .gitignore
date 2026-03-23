@@ -1,0 +1,40 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+/prices-domain/target/
+/prices-application/target/
+/prices-infra-rest/target/
+/prices-infrastructure-jpa/target/
+/prices-boot/target/
+/prices-test-blackbox/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/resources/data.sql
+!**/src/main/resources/schema.sql
+
+### Log files ###
+*.log
+
+### OS ###
+.DS_Store
+Thumbs.db
